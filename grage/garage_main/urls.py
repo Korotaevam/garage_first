@@ -4,5 +4,9 @@ from garage_main.views import *
 
 
 urlpatterns = [
-    path('', index),
+    path('', index, name='home'),
+    path('cat/', category, name='category'),
+    path('cat/<int:cat_id>', category, name='category_id'),
 ]
+
+
