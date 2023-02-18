@@ -21,5 +21,5 @@ class AutoModels(models.Model):
     is_published = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.vendor
+        return ' '.join(map(str, [self.articles, self.group, self.subgroup]))
 

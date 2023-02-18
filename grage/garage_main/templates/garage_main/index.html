@@ -1,0 +1,18 @@
+{% extends 'garage_main/base.html' %}
+
+{% block content %}
+
+<ul>
+    {% for ind1 in posts %}
+    {% if ind1.vendor %}
+    <li>
+        <h2> {{ind1.subgroup}} | {{ind1.vendor}} | {{ind1.brand}} </h2>
+
+        <hr>
+    </li>
+    {% endif %}
+    {% endfor %}
+    <br>
+    <br>
+
+    {% endblock content %}
