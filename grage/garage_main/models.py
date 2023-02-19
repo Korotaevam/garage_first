@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.urls import reverse
 
 
 class AutoModels(models.Model):
@@ -23,3 +24,5 @@ class AutoModels(models.Model):
     def __str__(self):
         return ' '.join(map(str, [self.articles, self.group, self.subgroup]))
 
+    def get_absolute_url(self):
+        return reverse('show_post', kwargs={'post_id': self.pk})

@@ -1,18 +1,15 @@
 {% extends 'garage_main/base.html' %}
 
 {% block content %}
-
 <ul>
     {% for ind1 in posts %}
     {% if ind1.vendor %}
     <li>
-        <h2> {{ind1.subgroup}} | {{ind1.vendor}} | {{ind1.brand}} </h2>
-
+        <h2> {{ind1.pk}} | {{ind1.subgroup|truncatechars:5}} | {{ind1.vendor }} |
+            {{ind1.time_create|timesince:ind1.time_update}} | {{ind1.get_absolute_url}} </h2>
+        <p class="link-read-post"><a href="{{ ind1.get_absolute_url }}">Читать пост</a></p>
         <hr>
     </li>
     {% endif %}
     {% endfor %}
-    <br>
-    <br>
-
-    {% endblock content %}
+{% endblock content %}

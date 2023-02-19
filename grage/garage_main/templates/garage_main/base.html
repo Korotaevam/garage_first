@@ -7,13 +7,29 @@
 <body>
 
 {% block mainmenu %}
-<ul>
+
+<style>
+   ul.hr {
+    margin: 0;
+    padding: 10px;
+   }
+   ul.hr li {
+    display: inline;
+    margin-right: 5px;
+    font-family: "My Custom Font", Verdana, Tahoma;
+    font-size: 28px;
+    padding: 33px;
+   }
+
+</style>
+
+<ul class="hr">
     {% for ind1 in menu%}
-    <li> {{ind1}}</li>
+    <li><a href="{% url ind1.url_name %}">{{ind1.title}}</a></li>
     {% endfor %}
     <br>
     <br>
-<h1> {{title}} </h1>
+    <h1> {{title}} </h1>
 
 </ul>
 {% endblock mainmenu %}
