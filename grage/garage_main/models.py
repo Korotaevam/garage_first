@@ -7,7 +7,7 @@ class AutoModels(models.Model):
     articles = models.CharField(max_length=255, blank=True)
     group = models.CharField(max_length=255, blank=True)
     subgroup = models.CharField(max_length=255, blank=True)
-    vendor = models.CharField(max_length=255,blank=True)
+    vendor = models.CharField(max_length=255, blank=True)
     vendor_code = models.CharField(max_length=255, blank=True)
     brand = models.CharField(max_length=255, blank=True)
     auto_model = models.CharField(max_length=255, blank=True)
@@ -20,9 +20,30 @@ class AutoModels(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
+    group_add = models.ForeignKey('GroupAdd', on_delete=models.PROTECT, null=True)
+    sub_group_add = models.ForeignKey('SubGroupAdd', on_delete=models.PROTECT, null=True)
+    model_add = models.ForeignKey('ModelAdd', on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return ' '.join(map(str, [self.articles, self.group, self.subgroup]))
 
     def get_absolute_url(self):
         return reverse('show_post', kwargs={'post_id': self.pk})
+
+
+class GroupAdd(models.Model):
+    name = models.CharField(max_length=255, blank=True, db_index=True)
+
+
+class SubGroupAdd(models.Model):
+    name = models.CharField(max_length=255, blank=True, db_index=True)
+
+
+class ModelAdd(models.Model):
+    name = models.CharField(max_length=255, blank=True, db_index=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('show_models', kwargs={'model_add_id': self.pk})

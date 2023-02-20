@@ -13,9 +13,12 @@ menu = [{'title': 'Home', 'url_name': 'home'},
 
 def index(request):
     posts = AutoModels.objects.all()
+    model = ModelAdd.objects.all()
     context_menu = {'posts': posts,
                     'menu': menu,
-                    'title': 'Main Page'
+                    'title': 'Main Page',
+                    'model': model,
+                    'cat_select': 0
                     }
     return render(request, 'garage_main/index.html', context=context_menu)
 
@@ -45,3 +48,17 @@ def category(request, cat_id=0):
     if cat_id > 10:
         return redirect('home')
     return HttpResponse(f'<h1> Cat Page <br> {cat_id}</h1>')
+
+def show_models(request, model_add_id):
+    posts = AutoModels.objects.filter(model_add=model_add_id)
+    model = ModelAdd.objects.all()
+
+    context_menu = {'posts': posts,
+                    'menu': menu,
+                    'title': 'Main Page',
+                    'model': model,
+                    'cat_select': model_add_id
+                    }
+
+    return render(request, 'garage_main/index.html', context=context_menu)
+
