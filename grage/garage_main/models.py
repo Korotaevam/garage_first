@@ -4,7 +4,8 @@ from django.urls import reverse
 
 
 class AutoModels(models.Model):
-    articles = models.CharField(max_length=255, blank=True)
+    articles = models.CharField(max_length=255, blank=True, verbose_name='Articles')
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL', blank=True)
     group = models.CharField(max_length=255, blank=True)
     subgroup = models.CharField(max_length=255, blank=True)
     vendor = models.CharField(max_length=255, blank=True)
@@ -25,18 +26,28 @@ class AutoModels(models.Model):
     model_add = models.ForeignKey('ModelAdd', on_delete=models.PROTECT, null=True)
 
     def __str__(self):
-        return ' '.join(map(str, [self.articles, self.group, self.subgroup]))
+        return ' '.join(map(str, [self.brand, self.group, self.subgroup]))
 
     def get_absolute_url(self):
         return reverse('show_post', kwargs={'post_id': self.pk})
 
+    class Meta:
+        verbose_name = 'Base'
+        verbose_name_plural = 'Bases'
+        ordering = ['articles']
 
 class GroupAdd(models.Model):
     name = models.CharField(max_length=255, blank=True, db_index=True)
 
+    def __str__(self):
+        return self.name
+
 
 class SubGroupAdd(models.Model):
     name = models.CharField(max_length=255, blank=True, db_index=True)
+
+    def __str__(self):
+        return self.name
 
 
 class ModelAdd(models.Model):

@@ -1,4 +1,7 @@
 {% extends 'garage_main/base.html' %}
+{% load garage_main_tags %}
+
+
 
 {% block content %}
 <style>
@@ -16,19 +19,22 @@
     font-size: 12px;
     padding: 3px;
    }
+
+
 </style>
 
 <ul class="hr">
+{% Models_Auto as model %}
 
-        {% if cat_select == 0 %}
-        <li> All </li>
+    {% if cat_select == 0 %}
+    <li> All</li>
     {% else %}
-        <li><a href="{% url 'home' %}"> All </a></li>
+    <li><a href="{% url 'home' %}"> All </a></li>
     {% endif %}
 
     {% for ind1 in model %}
     {% if cat_select == ind1.id %}
-    <li> {{ind1.name}} </li>
+    <li> {{ind1.name}}</li>
     {% else %}
     <li><a href="{{ ind1.get_absolute_url }}"> {{ind1.name}} </a></li>
     {% endif %}
@@ -36,21 +42,8 @@
 </ul>
 
 
-<ul class="ar">
-    {% for ind1 in posts %}
-    {% if ind1.vendor %}
-    <li>
-        <p> {{ind1.pk}} | {{ind1.subgroup|truncatechars:7}} | {{ind1.vendor }} |
-            {{ind1.time_create|timesince:ind1.time_update}} | {{ind1.get_absolute_url}}
-        </p>
-        <p class="link-read-post"><a href="{{ ind1.get_absolute_url }}">Читать пост
-            </a> | {{ind1.time_update|date:"SHORT_DATE_FORMAT"}} | {{ind1.group_add.name}}</p>
+{% AutoModels_link cat_select %}
 
-        <hr>
-    </li>
-    {% endif %}
-    {% endfor %}
 
- </ul>
 {% endblock content %}
 

@@ -1,0 +1,21 @@
+<ul class="ar">
+    {% for ind1 in posts %}
+    {% if ind1.vendor %}
+    <li>
+        {% if ind1.photo %}
+        <p><img style="vertical-align:middle" src="{{ind1.photo.url}}" width="50" height="50">
+            {% endif %}
+
+            {{ind1.pk}} | {{ind1.subgroup|truncatechars:7}} | {{ind1.vendor }} |
+            {{ind1.time_create|timesince:ind1.time_update}} | {{ind1.get_absolute_url}}
+            | {{ind1.auto_model}}
+        </p>
+
+        <p class="link-read-post"><a href="{{ ind1.get_absolute_url }}">Читать пост
+        </a> | {{ind1.time_update|date:"SHORT_DATE_FORMAT"}} | {{ind1.group_add.name}}</p>
+
+        <hr>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>

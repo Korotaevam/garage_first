@@ -1,3 +1,22 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import *
+
+
+class AutoModelsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'articles', 'group', 'subgroup', 'photo', 'is_published')
+    list_display_links = ('articles', 'group')
+    search_fields = ('articles', 'group')
+    list_editable = ('is_published',)
+    list_filter = ('is_published', 'group')
+
+class ModelAddAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+    search_fields = ('id',)
+
+
+admin.site.register(AutoModels, AutoModelsAdmin)
+admin.site.register(ModelAdd, ModelAddAdmin)
+admin.site.register(GroupAdd)
+admin.site.register(SubGroupAdd)

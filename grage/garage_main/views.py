@@ -13,11 +13,9 @@ menu = [{'title': 'Home', 'url_name': 'home'},
 
 def index(request):
     posts = AutoModels.objects.all()
-    model = ModelAdd.objects.all()
     context_menu = {'posts': posts,
                     'menu': menu,
                     'title': 'Main Page',
-                    'model': model,
                     'cat_select': 0
                     }
     return render(request, 'garage_main/index.html', context=context_menu)
@@ -41,7 +39,12 @@ def logout(request):
 
 
 def show_post(request, post_id):
-    return HttpResponse(f'<h1> show post <br> {post_id}</h1>')
+    posts = AutoModels.objects.filter(pk=post_id)
+    context_menu = {'posts': posts,
+                    'menu': menu,
+                    'title': 'Show post',
+                    }
+    return render(request, 'garage_main/show_post.html', context=context_menu)
 
 
 def category(request, cat_id=0):
@@ -49,16 +52,12 @@ def category(request, cat_id=0):
         return redirect('home')
     return HttpResponse(f'<h1> Cat Page <br> {cat_id}</h1>')
 
-def show_models(request, model_add_id):
-    posts = AutoModels.objects.filter(model_add=model_add_id)
-    model = ModelAdd.objects.all()
 
-    context_menu = {'posts': posts,
-                    'menu': menu,
-                    'title': 'Main Page',
-                    'model': model,
-                    'cat_select': model_add_id
-                    }
+def show_models(request, model_add_id):
+    context_menu = {
+        'menu': menu,
+        'title': 'Main Page',
+        'cat_select': model_add_id
+    }
 
     return render(request, 'garage_main/index.html', context=context_menu)
-
