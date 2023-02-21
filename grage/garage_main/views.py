@@ -38,8 +38,8 @@ def logout(request):
     return HttpResponse(f'<h1> logout <br> {request}</h1>')
 
 
-def show_post(request, post_id):
-    posts = AutoModels.objects.filter(pk=post_id)
+def show_post(request, post_slug):
+    posts = AutoModels.objects.filter(slug=post_slug)
     context_menu = {'posts': posts,
                     'menu': menu,
                     'title': 'Show post',

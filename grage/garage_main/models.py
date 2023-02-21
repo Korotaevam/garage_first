@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class AutoModels(models.Model):
     articles = models.CharField(max_length=255, blank=True, verbose_name='Articles')
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL', blank=True)
+    slug = models.SlugField(max_length=255, db_index=True, unique=True, verbose_name='URL')
     group = models.CharField(max_length=255, blank=True)
     subgroup = models.CharField(max_length=255, blank=True)
     vendor = models.CharField(max_length=255, blank=True)
@@ -13,6 +13,7 @@ class AutoModels(models.Model):
     brand = models.CharField(max_length=255, blank=True)
     auto_model = models.CharField(max_length=255, blank=True)
     quantity = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    margin = models.FloatField(default=1, validators=[MinValueValidator(0)])
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
@@ -29,12 +30,13 @@ class AutoModels(models.Model):
         return ' '.join(map(str, [self.brand, self.group, self.subgroup]))
 
     def get_absolute_url(self):
-        return reverse('show_post', kwargs={'post_id': self.pk})
+        return reverse('show_post', kwargs={'post_slug': self.slug})
 
     class Meta:
         verbose_name = 'Base'
         verbose_name_plural = 'Bases'
         ordering = ['articles']
+
 
 class GroupAdd(models.Model):
     name = models.CharField(max_length=255, blank=True, db_index=True)
