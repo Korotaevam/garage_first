@@ -8,12 +8,12 @@
     {% for ind1 in posts %}
 
         {% if ind1.photo %}
-        <p><img style="vertical-align:middle" src="{{ind1.photo.url}}" width="150" height="150">
+        <p><img style="vertical-align:middle" src="{{ind1.photo.url}}" width="150" height="150"></p>
             {% endif %}
 
     <li> {{ind1.pk}} | {{ind1.subgroup}} | {{ind1.vendor }} |
         {{ind1.time_create|timesince:ind1.time_update}} | {{ind1.get_absolute_url}}
-        | {{ind1.auto_model}}
+        | {{ind1.auto_model}} ShowModel
     </li>
 
     {% endfor %}

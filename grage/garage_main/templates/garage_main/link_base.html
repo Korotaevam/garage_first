@@ -1,14 +1,18 @@
 <ul class="ar">
+
+
     {% for ind1 in posts %}
     {% if ind1.vendor %}
     <li>
         {% if ind1.photo %}
         <p><img style="vertical-align:middle" src="{{ind1.photo.url}}" width="50" height="50">
             {% endif %}
+        {% if ind1.is_published %}
 
             {{ind1.pk}} | {{ind1.subgroup|truncatechars:7}} | {{ind1.vendor }} |
             {{ind1.time_create|timesince:ind1.time_update}} | {{ind1.get_absolute_url}}
-            | {{ind1.auto_model}}
+            | {{ind1.auto_model}} |{{ind1.is_published}} | {{ind1.brand}} | {{ind1.model_add_id}}
+            link_base
         </p>
 
         <p class="link-read-post"><a href="{{ ind1.get_absolute_url }}">Читать пост
@@ -16,6 +20,7 @@
 
         <hr>
     </li>
+    {% endif %}
     {% endif %}
     {% endfor %}
 </ul>

@@ -1,24 +1,54 @@
+from django.db.models import Q, Min
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.generic import ListView
 
+from garage_main.forms import AutoModelsPostForms
 from garage_main.models import *
 
 menu = [{'title': 'Home', 'url_name': 'home'},
         {'title': 'About', 'url_name': 'about'},
+        {'title': 'Add Article', 'url_name': 'add_article'},
         {'title': 'Feedback', 'url_name': 'feedback'},
         {'title': 'Login', 'url_name': 'login'},
         {'title': 'Logout', 'url_name': 'logout'},
         ]
 
 
-def index(request):
-    posts = AutoModels.objects.all()
-    context_menu = {'posts': posts,
-                    'menu': menu,
-                    'title': 'Main Page',
-                    'cat_select': 0
-                    }
-    return render(request, 'garage_main/index.html', context=context_menu)
+# print(AutoModels.objects.filter(Q(pk=1) | Q(id__lt=4)))
+# print(111, AutoModels.objects.order_by('pk').first())
+# print(222, ModelAdd.objects.filter(automodels__group__contains='ЕЛЬ').distinct())
+# print(222, ModelAdd.objects.aggregate(minimum=Min("pk")))
+# print(444, AutoModels.objects.values('group').get(pk=1))
+
+
+class IndexView(ListView):
+    model = AutoModels
+    template_name = 'garage_main/index.html'
+    context_object_name = 'model'
+
+    # extra_context = {'title': 'Main Page'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'Main Page'
+        context['cat_select'] = 0
+        return context
+
+    def get_queryset(self):
+        return AutoModels.objects.filter(is_published=True)
+
+    # def index(request):
+
+
+#     posts = AutoModels.objects.all()
+#     context_menu = {'posts': posts,
+#                     'model': menu,
+#                     'title': 'Main Page',
+#                     'cat_select': 0
+#                     }
+#     return render(request, 'garage_main/index.html', context=context_menu)
 
 
 def about(request):
@@ -28,6 +58,17 @@ def about(request):
 
 def feedback(request):
     return HttpResponse(f'<h1> feedback <br> {request}</h1>')
+
+
+def AddArticle(request):
+    if request.method == 'POST':
+        form = AutoModelsPostForms(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AutoModelsPostForms()
+    return render(request, 'garage_main/addpost.html', {'form': form, 'title': 'Add Article', 'menu': menu})
 
 
 def login(request):
@@ -53,11 +94,31 @@ def category(request, cat_id=0):
     return HttpResponse(f'<h1> Cat Page <br> {cat_id}</h1>')
 
 
-def show_models(request, model_add_id):
-    context_menu = {
-        'menu': menu,
-        'title': 'Main Page',
-        'cat_select': model_add_id
-    }
+# def show_models(request, model_add_id):
+#     context_menu = {
+#         'menu': menu,
+#         'title': 'Show models',
+#         'cat_select': model_add_id
+#     }
+#
+#     return render(request, 'garage_main/index.html', context=context_menu)
 
-    return render(request, 'garage_main/index.html', context=context_menu)
+class ShowModelsView(ListView):
+    model = AutoModels
+    template_name = 'garage_main/index.html'
+    context_object_name = 'model'
+
+    # extra_context = {'title': 'Main Page'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'Show models'
+        context['cat_select'] = self.kwargs['model_add_id_1']
+
+        return context
+
+    # def get_queryset(self):
+    #     return AutoModels.objects.filter(is_published=True)
+
+# cat_select=self.kwargs['model_add_id'],

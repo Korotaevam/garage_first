@@ -35,7 +35,7 @@ class AutoModels(models.Model):
     class Meta:
         verbose_name = 'Base'
         verbose_name_plural = 'Bases'
-        ordering = ['articles']
+        ordering = ['id']
 
 
 class GroupAdd(models.Model):
@@ -59,4 +59,4 @@ class ModelAdd(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('show_models', kwargs={'model_add_id': self.pk})
+        return reverse('show_models', kwargs={'model_add_id_1': self.pk})
