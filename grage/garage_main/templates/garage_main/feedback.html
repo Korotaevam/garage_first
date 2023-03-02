@@ -1,0 +1,33 @@
+{% for ind1 in object_list %}
+<br>
+<li>
+
+    {{ind1.pk}} | {{ind1.subgroup|truncatechars:7}} | {{ind1.vendor }} |
+    {{ind1.time_create|timesince:ind1.time_update}} | {{ind1.get_absolute_url}}
+    | {{ind1.auto_model}} |{{ind1.is_published}} | {{ind1.brand}} | {{ind1.model_add_id}}
+    <br>
+    <hr>
+</li>
+
+{% endfor %}
+
+
+{% if page_obj.has_other_pages %}
+{% if page_obj.has_previous %}
+<a href="?page={{page_obj.previous_page_number}}"> &lt; </a>
+{% endif %}
+{% for page in paginator.page_range %}
+
+{% if page == page_obj.number %}
+
+{{page}}
+{% elif page >= page_obj.number|add:-2 and page <= page_obj.number|add:2 %}
+<a href="?page={{page}}"> {{page}} </a>
+
+
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if page_obj.has_next %}
+<a href="?page={{page_obj.next_page_number}}"> &gt; </a>
+{% endif %}

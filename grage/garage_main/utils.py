@@ -6,16 +6,17 @@ menu = [{'title': 'Home', 'url_name': 'home'},
         {'title': 'About', 'url_name': 'about'},
         {'title': 'Add Article', 'url_name': 'add_article'},
         {'title': 'Feedback', 'url_name': 'feedback'},
+        {'title': 'Register', 'url_name': 'register'},
         {'title': 'Login', 'url_name': 'login'},
         {'title': 'Logout', 'url_name': 'logout'},
         ]
 
 
 class DataMixin(ListView):
-
     model = AutoModels
     template_name = 'garage_main/index.html'
     context_object_name = 'model'
+    paginate_by = 3
 
     def get_user_data(self, *, object_list=None, title, **kwargs):
         context = super().get_context_data(**kwargs)

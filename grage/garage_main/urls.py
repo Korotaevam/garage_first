@@ -6,7 +6,8 @@ from garage_main.views import *
 urlpatterns = [
     path('', IndexView.as_view(), name='home'),
     path('about/', about, name='about'),
-    path('feedback/', feedback, name='feedback'),
+    path('feedback/', Feedback.as_view(), name='feedback'),
+    path('register/', RegisterForm.as_view(), name='register'),
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('add_article/', AddArticle, name='add_article'),

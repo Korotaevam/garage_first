@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Min
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView
 
-from .forms import AutoModelsPostForms
+from .forms import AutoModelsPostForms, RegisterUserForm
 from .models import *
 from .utils import *
 
@@ -18,6 +20,8 @@ from .utils import *
 
 
 class IndexView(DataMixin):
+    paginate_by = 2
+
     # model = AutoModels
     # template_name = 'garage_main/index.html'
     # context_object_name = 'model'
@@ -50,8 +54,10 @@ def about(request):
     return render(request, 'garage_main/about.html', {'title': 'About page', 'menu': menu, 'posts': posts})
 
 
-def feedback(request):
-    return HttpResponse(f'<h1> feedback <br> {request}</h1>')
+class Feedback(DataMixin):
+    # paginate_by = 3
+    model = AutoModels
+    template_name = 'garage_main/feedback.html'
 
 
 class AddArticle(LoginRequiredMixin):
@@ -76,6 +82,16 @@ def login(request):
 
 def logout(request):
     return HttpResponse(f'<h1> logout <br> {request}</h1>')
+
+
+class RegisterForm(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'garage_main/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(title='Register', **kwargs)
+        return context
 
 
 def show_post(request, post_slug):
@@ -103,6 +119,7 @@ def category(request, cat_id=0):
 #     return render(request, 'garage_main/index.html', context=context_menu)
 
 class ShowModelsView(DataMixin):
+
     # model = AutoModels
     # template_name = 'garage_main/index.html'
     # context_object_name = 'model'
