@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'captcha',
     'debug_toolbar',
     'garage_main.apps.GarageMainConfig',
 ]

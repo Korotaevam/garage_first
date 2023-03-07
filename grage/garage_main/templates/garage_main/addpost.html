@@ -2,15 +2,18 @@
 
 
 {% block content %}
+{% load cache %}
 
+{%cache 10 sidebar %}
 <form action="{% url 'add_article' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     {% for ind1 in form %}
-<p><label for="{{ ind1.id_for_label }}">{{ind1.label}}: </label>{{ind1}} {{ind1.errors}}</p>
+    <p><label for="{{ ind1.id_for_label }}">{{ind1.label}}: </label>{{ind1}} {{ind1.errors}}</p>
     {% endfor %}
 
     <input type="submit" value="Submit">
 </form>
 
+{% endcache %}
 {% endblock content %}

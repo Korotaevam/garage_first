@@ -1,0 +1,17 @@
+{% extends 'garage_main/base.html' %}
+
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+
+    {% for ind1 in form %}
+    <p><label for="{{ ind1.id_for_label }}">{{ind1.label}}: </label>{{ind1}} </p>
+    <p style="color:#0000FF"> {{ind1.errors}}</p>
+
+    {% endfor %}
+
+    <button type="submit"> Send</button>
+</form>
+
+{% endblock content %}

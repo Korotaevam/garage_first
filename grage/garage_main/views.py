@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.core.cache import cache
 from django.db.models import Q, Min
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, FormView
 
-from .forms import AutoModelsPostForms, RegisterUserForm, LoginUserForm
+from .forms import *
 from .models import *
 from .utils import *
 
@@ -114,8 +115,13 @@ class RegisterForm(CreateView):
         login(self.request, user)
         return redirect('home')
 
+
 def show_post(request, post_slug):
-    posts = AutoModels.objects.filter(slug=post_slug)
+    posts = cache.get('posts')
+    if not cache:
+        posts = AutoModels.objects.filter(slug=post_slug)
+        cache.set('posts', posts, 10)
+
     context_menu = {'posts': posts,
                     'menu': menu,
                     'title': 'Show post',
@@ -156,4 +162,17 @@ class ShowModelsView(DataMixin):
     # def get_queryset(self):
     #     return AutoModels.objects.filter(is_published=True)
 
+
 # cat_select=self.kwargs['model_add_id'],
+
+class ContactsFormView(FormView):
+    form_class = ContactForm
+    template_name = 'garage_main/contact.html'
+    success_url = reverse_lazy('home')
+
+    def get_user_data(self, *, object_list=None, title, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        return redirect('home')

@@ -23,7 +23,7 @@ from grage import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('garage_main.urls')),
-
+    path('captcha/', include('captcha.urls')),
 ]
 
 
