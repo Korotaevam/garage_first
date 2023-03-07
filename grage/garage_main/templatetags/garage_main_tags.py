@@ -12,8 +12,8 @@ def ModelAdd_models():
 @register.inclusion_tag('garage_main/link_base.html')
 def AutoModels_link(cat_select):
     if cat_select:
-        posts = AutoModels.objects.filter(model_add=cat_select)
+        posts = AutoModels.objects.filter(model_add=cat_select).select_related('group_add')
     else:
-        posts = AutoModels.objects.all()
+        posts = AutoModels.objects.all().select_related('group_add')
     return {'posts': posts}
 

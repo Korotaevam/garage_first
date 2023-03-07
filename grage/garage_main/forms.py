@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from string import ascii_letters
@@ -38,3 +38,8 @@ class RegisterUserForm(UserCreationForm):
             'password2': forms.PasswordInput,
             'email': forms.EmailInput
         }
+
+
+class LoginUserForm(AuthenticationForm):
+    username = forms.CharField(label='Login', widget=forms.TextInput())
+    password = forms.CharField(label='Login', widget=forms.PasswordInput())
