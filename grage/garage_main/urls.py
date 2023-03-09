@@ -20,6 +20,9 @@ urlpatterns = [
 
     path('cat/', category, name='category'),
     path('cat/<int:cat_id>', category, name='category_id'),
+
+    path('api/v1/automodel/', AutoAPIList.as_view()),
+    path('api/v1/automodel/<int:pk>/', AutoAPIDetail.as_view()),
 ]
 
 

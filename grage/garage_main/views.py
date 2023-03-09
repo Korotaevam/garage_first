@@ -5,13 +5,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.db.models import Q, Min
+from django.forms import model_to_dict
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, FormView
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import *
 from .models import *
+from .serializers import *
 from .utils import *
 
 
@@ -176,3 +181,77 @@ class ContactsFormView(FormView):
 
     def form_valid(self, form):
         return redirect('home')
+
+
+class AutoAPIList(generics.ListCreateAPIView):
+    queryset = AutoModels.objects.all()
+    serializer_class = AutoSerializer
+
+class AutoAPIDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AutoModels.objects.all()
+    serializer_class = AutoSerializer
+
+
+#
+# class AutoAPIView(APIView):
+#     # queryset = AutoModels.objects.all()
+#     # serializer_class = AutoSerializer
+#
+#     def get(self, request):
+#         lst = AutoModels.objects.all()
+#         return Response({'status': AutoSerializer(lst, many=True).data})
+#
+#     def post(self, request):
+#         serializer = AutoSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#
+#         # posts_new = AutoModels.objects.create(
+#         #     articles=request.data['articles'],
+#         #     group=request.data['group'],
+#         #     subgroup=request.data['subgroup'],
+#         #     group_add_id=request.data['group_add_id'],
+#         #     sub_group_add_id=request.data['sub_group_add_id'],
+#         #     model_add_id=request.data['model_add_id'],
+#         #     photo=request.data['photo'],
+#         #     slug=request.data['slug']
+#         # )
+#
+#         # post_update_photo = model_to_dict(posts_new)
+#         # post_update_photo["photo"] = str(post_update_photo["photo"])
+#
+#         return Response({'status': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({'error': 'No pk'})
+#
+#         try:
+#             instance = AutoModels.objects.get(pk=pk)
+#         except:
+#             return Response({'error': 'Object not found'})
+#
+#         serializer = AutoSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({'status': serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({'error': 'No pk'})
+#
+#         try:
+#             instance = AutoModels.objects.get(pk=pk)
+#         except:
+#             return Response({'error': 'Object not found'})
+#
+#         if not instance.is_published:
+#             del_models = AutoModels.objects.filter(pk=pk)
+#             del_models.delete()
+#         else:
+#             instance.is_published = False
+#             instance.save()
+#
+#         return Response({'status': 'OK'})
