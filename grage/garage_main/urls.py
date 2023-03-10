@@ -1,9 +1,12 @@
 
-from django.urls import path
+from django.urls import path, include
 from django.views.decorators.cache import cache_page
+from rest_framework import routers
 
 from garage_main.views import *
 
+router = routers.DefaultRouter()
+router.register(r'automodel', AutoModelsViewSet)
 
 urlpatterns = [
     path('', cache_page(10)(IndexView.as_view()), name='home'),
@@ -21,8 +24,12 @@ urlpatterns = [
     path('cat/', category, name='category'),
     path('cat/<int:cat_id>', category, name='category_id'),
 
-    path('api/v1/automodel/', AutoAPIList.as_view()),
-    path('api/v1/automodel/<int:pk>/', AutoAPIDetail.as_view()),
+    path('api/v1/', include(router.urls)),
+
+    # path('api/v1/automodel/', AutoModelsViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # path('api/v1/automodel/<int:pk>/', AutoModelsViewSet.as_view({'put': 'update', 'delete': 'destroy'}))
+    # path('api/v1/automodel/', AutoAPIList.as_view()),
+    # path('api/v1/automodel/<int:pk>/', AutoAPIDetail.as_view()),
 ]
 
 

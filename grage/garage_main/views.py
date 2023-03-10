@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, FormView
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -183,14 +183,9 @@ class ContactsFormView(FormView):
         return redirect('home')
 
 
-class AutoAPIList(generics.ListCreateAPIView):
+class AutoModelsViewSet(viewsets.ModelViewSet):
     queryset = AutoModels.objects.all()
     serializer_class = AutoSerializer
-
-class AutoAPIDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = AutoModels.objects.all()
-    serializer_class = AutoSerializer
-
 
 #
 # class AutoAPIView(APIView):
