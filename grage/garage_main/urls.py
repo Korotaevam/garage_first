@@ -29,6 +29,9 @@ urlpatterns = [
     path('api/v1/automodel/<int:pk>/', AutoModelsAPIUpdate.as_view()),
     path('api/v1/automodel_delete/<int:pk>/', AutoModelsAPIDelete.as_view()),
 
+    path('api/v1/auth/', include('rest_framework.urls')),
+
+
     # path('api/v1/', include(router.urls)), # route
 
     # path('api/v1/automodel/', AutoModelsViewSet.as_view({'get': 'list', 'post': 'create'})),
