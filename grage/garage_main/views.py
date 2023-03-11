@@ -11,11 +11,14 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, FormView
 from rest_framework import generics, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .forms import *
 from .models import *
+from .permissions import *
 from .serializers import *
 from .utils import *
 
@@ -183,11 +186,40 @@ class ContactsFormView(FormView):
         return redirect('home')
 
 
-class AutoModelsViewSet(viewsets.ModelViewSet):
+# class AutoModelsViewSet(viewsets.ModelViewSet):
+#     queryset = AutoModels.objects.all()   # можно убрать
+#     serializer_class = AutoSerializer
+#
+#     def get_queryset(self):
+#         pk = self.kwargs.get('pk')
+#         if pk:
+#             return AutoModels.objects.filter(pk=pk)
+#
+#         return AutoModels.objects.all()
+#
+#     @action(methods=['get'], detail=True)
+#     def show_model(self, request, pk = None):
+#         models_auto = ModelAdd.objects.get(pk=pk)
+#         return Response({'models': models_auto.name})
+
+
+class AutoModelsAPIList(generics.ListCreateAPIView):
     queryset = AutoModels.objects.all()
     serializer_class = AutoSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
-#
+
+class AutoModelsAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = AutoModels.objects.all()
+    serializer_class = AutoSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+class AutoModelsAPIDelete(generics.RetrieveDestroyAPIView):
+    queryset = AutoModels.objects.all()
+    serializer_class = AutoSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+
 # class AutoAPIView(APIView):
 #     # queryset = AutoModels.objects.all()
 #     # serializer_class = AutoSerializer

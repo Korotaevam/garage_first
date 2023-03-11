@@ -8,9 +8,11 @@ from .models import *
 
 
 class AutoSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = AutoModels
-        fields = ('vendor', 'slug', 'vendor_code')
+        fields = ('vendor', 'slug', 'vendor_code', 'user')
 
 # class AutoSerializer(serializers.Serializer):
 #     vendor = serializers.CharField(max_length=100)
